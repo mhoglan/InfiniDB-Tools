@@ -1,0 +1,14 @@
+---
+# Variables are mainly in the role vars which can be overriden here or with -e
+
+# Simple root single node instance
+cluster_name: infinidb
+
+# Download from S3 bucket as host is container and does not contain packages
+infinidb_package_retrieval: s3download
+infinidb_releases_s3_bucket: infinidb-packages
+
+infinidb_install_type: singlenode
+infinidb_install_version: 4.6.0-1
+
+infinidb_create_local_inventory: false

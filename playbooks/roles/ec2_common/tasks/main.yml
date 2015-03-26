@@ -1,0 +1,25 @@
+---
+# Include var files based on value (performs mapping)
+- name: Include vars
+  include_vars: "{{ lookup('first_found', var_locations) }}"
+  with_items: var_includes
+
+# Generate variable from template which will dynamically make device list from sequence
+- name: Generate ephemeral_disks variable 
+  set_fact:
+    ephemeral_disks: "{{ lookup('template', '../templates/ephemeral_disks.j2') | from_yaml }}"
+
+# Include validations vars for EC2 
+- name: Include validate vars 
+  include_vars: "{{ lookup('first_found', var_locations) }}"
+  when: validate_vars is defined and validate_vars | bool and ec2_validate_vars is defined and ec2_validate_vars | bool
+  with_items:
+    - { name: 'validation_vars', value: 'ec2_validation_vars' }
+
+# Validate the vars
+- name: Validate variables
+  include: validate_vars.yml
+  vars:
+    validation_vars: "{{ ec2_validation_vars }}"
+    validation_values: "{{ ec2_validation_values }}"
+  when: validate_vars is defined and validate_vars | bool and ec2_validate_vars is defined and ec2_validate_vars | bool

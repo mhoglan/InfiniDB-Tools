@@ -1,0 +1,10 @@
+---    
+spot_price: 0.50
+image_type: instance_backed
+keypair: root
+subnet: subnet_1
+instance_type: r3.2xlarge
+instance_count: 1
+infinidb_um_count: 1
+infinidb_dbroots_per_pm: 2
+infinidb_install_type: singlenode

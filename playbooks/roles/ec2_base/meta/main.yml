@@ -1,0 +1,11 @@
+---
+dependencies:
+  - role: ec2_common
+  - role: disk_device
+    disks: "{{ ephemeral_disks }}"
+    mount_base_directory: /mnt
+    mount_base_name: ephemeral
+  - role: disk_device
+    disks: "{{ ebs_disks }}"
+    mount_base_directory: /mnt
+    mount_base_name: ebs

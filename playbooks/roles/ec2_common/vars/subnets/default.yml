@@ -1,0 +1,6 @@
+---
+# Default to no subnet id; will cause attribute to omit
+# Will go into default VPC
+
+# Example of populated entry
+# vpc_subnet_id: 12345id

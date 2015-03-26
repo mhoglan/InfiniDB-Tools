@@ -1,0 +1,30 @@
+{#- Comments in Jinja2 syntax so does not appear in result.
+    Trailing \n to force output when needed at end as whitespace trimmed  #}
+2                              {#- Cluster Install Type (1 - single  2 - multi) #}{{"\n"-}}
+n                              {#- Enable EC2 / VPC services (y/n) #}{{"\n"-}}
+1                              {#- Multinode Type (1 - separate 2 - combined) #}{{"\n"-}}
+{{ cluster_name }}             {#- Name of System #}{{"\n"-}}
+pm1                            {#- Role of Local Machine (pmx) #}{{"\n"-}}
+1                              {#- Storage Type (1 - internal 2 - external) #}{{"\n"-}}
+{{ ums | count }}              {#- Count of UMs #}{{"\n"-}}
+1                              {#- Starting UM ID #}{{"\n"-}}
+{% for item in ums %}          {#- Setup UMs #}
+{{ item }}                     {#- UM Hostname for interface1 #}{{"\n"-}}
+{{ item }}                     {#- UM IP for interface1 #}{{"\n"-}}
+unassigned                     {#- UM Hostname for interface2 #}{{"\n"-}}
+{% endfor %}
+{{ pms | count }}              {#- Count of PMs #}{{"\n"-}}
+1                              {#- Starting PM ID #}{{"\n"-}}
+{% for item in pms %}          {#- Setup PMs and DBRoots per PM #}
+{{ item }}                     {#- PM Hostname for interface1 #}{{"\n"-}}
+{{ item }}                     {#- PM IP for inteerface1 #}{{"\n"-}}
+unassigned                     {#- PM Hostname for interface2 #}{{"\n"-}}
+{{ range((loop.index0 * infinidb_dbroots_per_pm) + 1, (loop.index0 * infinidb_dbroots_per_pm) + infinidb_dbroots_per_pm + 1) | list | join(',') }}        {#- DB Root IDs for PM #}{{"\n"-}}
+{% endfor %}
+n                              {#- Disable SNMP trap (y/n) #}{{"\n"-}}
+0.0.0.0                        {#- External SNMP Trap #}{{"\n"-}}
+n                              {#- Configure External Devices (y/n) #}{{"\n"-}}
+y                              {#- Continue with Install (y/n) #}{{"\n"-}}
+binary                         {#- Install Package Type (rpm / deb / binary) #}{{"\n"-}}
+                               {#- SSH password (blank use default SSH key) #}{{"\n"-}}
+y                              {#- Start System #}{{"\n"-}}

@@ -1,0 +1,32 @@
+---
+users:
+  - user: infinidb
+    group: infinidb
+    sudo: true
+    ssh_authorized_keys:
+      - insecure_rsa.pub
+    ssh_private_keys:
+      - insecure_rsa
+    ssh_config:
+      - host: "*"
+        key: "insecure_rsa"
+    default_ssh_key:
+      - insecure_rsa
+    ulimits:
+      - "infinidb    soft    nofile  65535"
+      - "infinidb    hard    nofile  65535"
+    awscli: 
+      region: us-west-2
+      output: json
+      access_key_id: 123456key
+      secret_access_key: 123456key
+  - user: root
+    group: root
+    ssh_authorized_keys:
+      - insecure_rsa.pub
+    ssh_private_keys:
+      - insecure_rsa
+    ssh_config:
+      - host: "*"
+        key: "insecure_rsa"
+    ulimits: []

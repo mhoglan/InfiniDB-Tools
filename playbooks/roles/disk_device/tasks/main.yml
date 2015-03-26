@@ -1,0 +1,9 @@
+# Setup disks for system 
+- name: Create filesystem for disks
+  filesystem: fstype={{ item.fs }} dev={{ item.device }} force=yes
+  when: item.mkfs is undefined or item.mkfs | bool 
+  with_items: disks
+  
+- name: Mount disks {{ mount_base_directory }}/{{ mount_base_name }}
+  mount: name={{ mount_base_directory }}/{{ mount_base_name }}{{ item.0 + 1 }} src={{ item.1.device }} fstype={{ item.1.fs }} state=mounted
+  with_indexed_items: disks

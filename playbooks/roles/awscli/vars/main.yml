@@ -1,0 +1,13 @@
+---
+# Default users to empty list
+awscli_users: []
+
+# Example of populated entry
+# awscli_users:
+#   - user: infinidb
+#     group: infinidb
+#     awscli: 
+#       - region: us-west-2
+#       - output: json
+#       - access_key_id: 123456key
+#       - secret_acces_key: 123456key

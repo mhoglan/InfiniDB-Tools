@@ -1,0 +1,11 @@
+---    
+spot_price: 1.00
+image_type: instance_backed
+keypair: root
+subnet: subnet_1
+instance_type: r3.2xlarge
+instance_count: 12
+infinidb_install_profile: infinidb
+infinidb_install_type: multinode_separate
+infinidb_install_version: 4.6.3-1
+infinidb_um_count: 2

@@ -1,0 +1,10 @@
+---
+# Default directories to an empty list
+system_symlinks: []
+
+# Example of populated entry
+# system_symlinks: 
+#   - src: /mnt/ephemeral1/data
+#     dest: /data
+#     owner: root
+#     group: root

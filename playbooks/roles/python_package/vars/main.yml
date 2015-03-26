@@ -1,0 +1,10 @@
+---
+# Default python packages to empty list
+# PIP will be ensured if any packages defined
+python_packages: []
+
+# Example of populated entry
+# python_packages:
+#   - virtualenv
+#   - boto
+#   - awscli

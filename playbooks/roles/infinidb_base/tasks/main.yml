@@ -1,0 +1,12 @@
+---
+# Setup default/infinidb for env for service 
+- name: Create /etc/default/infinidb file
+  template: src=default_infinidb.j2 dest=/etc/default/infinidb owner=root group=root mode=0755
+
+- name: Update inventory groups and vars
+  include: update_inventory.yml
+  when: infinidb_update_inventory is defined and infinidb_update_inventory | bool
+  
+- name: Create local inventory
+  include: create_local_inventory.yml
+  when: infinidb_create_local_inventory is defined and infinidb_create_local_inventory | bool

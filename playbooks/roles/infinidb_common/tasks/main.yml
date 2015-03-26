@@ -1,0 +1,20 @@
+---
+# Include var files based on value (performs mapping)
+- name: Include vars
+  include_vars: "{{ lookup('first_found', var_locations) }}"
+  with_items: var_includes
+
+# Include validations vars for InfiniDB 
+- name: Include validate vars 
+  include_vars: "{{ lookup('first_found', var_locations) }}"
+  when: validate_vars is defined and validate_vars | bool and infinidb_validate_vars is defined and infinidb_validate_vars | bool
+  with_items:
+    - { name: 'validation_vars', value: 'infinidb_validation_vars' }
+
+# Validate the vars
+- name: Validate variables
+  include: validate_vars.yml
+  vars:
+    validation_vars: "{{ infinidb_validation_vars }}"
+    validation_values: "{{ infinidb_validation_values }}"
+  when: validate_vars is defined and validate_vars | bool and infinidb_validate_vars is defined and infinidb_validate_vars | bool

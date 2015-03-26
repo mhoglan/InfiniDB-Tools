@@ -1,0 +1,46 @@
+---
+# Default validation vars to empty lists
+ec2_validation_vars: []
+ec2_validation_values: []
+
+# Example of default ec2 validation vars
+# Most likely this will be overridden in site_vars as these are site specific
+# Turn off validation with ec2_validations_vars or globally with validate_vars
+
+# # Specify vars to validate
+# # Keep separate from value dict to allow override
+# ec2_validation_vars:
+#   - instance_type
+#   - image
+#   - vpc_subnet_id
+#   - key_name
+
+# # Dict which specifies valid var values 
+# ec2_validation_values:
+#   instance_type:
+#     - m3.medium
+#     - m3.large
+#     - m3.xlarge
+#     - m3.2xlarge
+#     - r3.large
+#     - r3.xlarge
+#     - r3.2xlarge
+#     - r3.4xlarge
+#     - r3.8xlarge
+#     - i2.2xlarge
+#     - i2.4xlarge
+#     - i2.8xlarge
+#     - c3.large
+#     - c3.xlarge
+#     - c3.2xlarge
+#     - c3.4xlarge
+#     - c3.8xlarge
+#   image:
+#     - ami-123456
+#     - ami-234567
+#   vpc_subnet_id:
+#     - subnet-123456id
+#     - subnet-234567id
+#   key_name:
+#     - keyname1
+#     - keyname2

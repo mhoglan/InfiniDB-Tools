@@ -1,0 +1,4 @@
+---
+# Default SSH variables for waiting on EC2
+ssh_wait_seconds: 15
+ssh_timeout_seconds: 320

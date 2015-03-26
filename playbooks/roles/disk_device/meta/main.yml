@@ -1,0 +1,6 @@
+---
+allow_duplicates: yes
+
+# Ensure e2fsprogs exists to allow mkfs
+dependencies:
+  - { role: system_package, system_packages: ['e2fsprogs'] }

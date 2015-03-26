@@ -1,0 +1,54 @@
+---
+# Shared variables are loaded through infinidb_common dependency
+# Copy and untar infinidb binary tar file, and run postConfigure
+
+# Cannot conditionally include task file based on var value
+# Feels a bit too much to break out each into a role (infinidb_package_s3 or infinidb_package_copy)
+# Just use conditionals to skip task and then stat check to ensure retrieval
+
+# Download binary package from S3
+- name: Download release from S3
+  s3:
+    aws_access_key: '{{ aws_access_key | default(omit) }}'
+    aws_secret_key: '{{ aws_secret_key | default(omit) }}'
+    bucket: '{{ infinidb_releases_s3_bucket }}'
+    object: infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz
+    dest: '{{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz'
+    mode: get
+  when: infinidb_package_retrieval == 's3download'
+
+# Copy binary package from host to remote
+- name: Copy InfiniDB binary .tar.gz file
+  copy: src={{ item }} dest={{ infinidb_home_directory }}
+  with_items:
+    - "{{ infinidb_package_directory }}/infinidb-ent-{{ infinidb_install_version}}.x86_64.bin.tar.gz"
+  when: infinidb_package_retrieval == 'copy'
+
+# Ensure that package retrieval occured
+- name: Ensure that package retrieval occured
+  stat: path="{{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz"
+  register: infinidb_package_check
+- fail: msg="Package retrieval did not produce a package at {{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz"
+  when: infinidb_package_check.stat.exists == False
+
+- name: Generate postConfigure input from template
+  template: src={{ infinidb_install_type }}_postconfigure_stdin.j2 dest={{ infinidb_home_directory }}/postconfigure_stdin
+
+- name: Ensure install base directory exists ({{ infinidb_install_directory }})
+  file: path={{ infinidb_install_directory }} state=directory
+
+# Trailing / matters on dest as it will require rights on parent dir if not specified
+- name: Unpack InfiniDB into install location
+  unarchive: src={{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version}}.x86_64.bin.tar.gz copy=no creates={{ infinidb_install_directory }}/Calpont/etc/Calpont.xml dest={{ infinidb_install_directory }}/
+
+- name: Execute post-install
+  command: "{{ infinidb_install_directory }}/Calpont/bin/post-install --installdir={{ infinidb_install_directory }}/Calpont"
+
+# Run postConfigure
+- name: Execute postConfigure with generated input
+  shell: cd; bash -lc "{{ infinidb_install_directory }}/Calpont/bin/postConfigure -p ssh < {{ infinidb_home_directory }}/postconfigure_stdin > {{ infinidb_home_directory }}/postconfigure.log 2>&1"
+
+# Have to hard restart the system to get it in correct state;
+# TODO: Maybe have it shutdownsystem instead
+- name: Restart InfiniDB to get system in correct state
+  shell: cd; bash -lc "{{ infinidb_install_directory }}/Calpont/bin/calpontConsole restartSystem y Force"

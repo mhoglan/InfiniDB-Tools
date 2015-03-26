@@ -1,0 +1,5 @@
+---
+allow_duplicates: yes
+dependencies:
+  # ensure easy_install available on system
+  - { role: system_package, system_packages: ['python-setuptools'] }

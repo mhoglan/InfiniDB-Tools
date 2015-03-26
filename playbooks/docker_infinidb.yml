@@ -1,0 +1,5 @@
+---
+- include: system.yml
+- include: infinidb.yml
+- include: infinidb_data.yml
+- include: infinidb_supervisor.yml

@@ -1,0 +1,6 @@
+---
+# Default location of InfiniDB service script
+# May not be in /etc/init.d so reference the one in bin
+infinidb_service_script: "{{ infinidb_install_directory }}/Calpont/bin/infinidb"
+infinidb_supervisor_script: /usr/local/supervisor/bin/infinidb.sh
+infinidb_supervisord_conf: /etc/supervisord_infinidb.conf

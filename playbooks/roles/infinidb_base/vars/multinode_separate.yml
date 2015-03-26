@@ -1,0 +1,3 @@
+---
+ums: "{{ groups.launched | batch(infinidb_um_count) | first }}"
+pms: "{{ groups.launched | reverse | batch((groups.launched | length) - infinidb_um_count) | first }}"

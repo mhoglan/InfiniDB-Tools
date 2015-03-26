@@ -1,0 +1,4 @@
+{% for ssh_host in item.ssh_config %}
+Host {{ ssh_host.host }}
+IdentityFile ~/.ssh/{{ ssh_host.key }}
+{% endfor %}

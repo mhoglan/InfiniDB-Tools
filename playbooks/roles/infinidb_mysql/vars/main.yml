@@ -1,0 +1,27 @@
+---
+# Default users to empty list
+infinidb_mysql_users: []
+
+# Example of populated
+# infinidb_mysql_users:
+#   - user: infinidb
+#     infinidb_mysql:
+#       - password: password
+#         hosts:
+#           - %
+#           - localhost
+#           - 127.0.0.1
+#         privs:
+#           - *.*:SELECT
+#           - mydb.*:ALL
+
+# Default connection information
+infinidb_mysql_socket: "{{ infinidb_install_directory}}/Calpont/mysql/lib/mysql/mysql.sock"
+infinidb_mysql_port: 3306
+
+# By default do not secure MySQL
+infinidb_mysql_secure: false
+
+# Default password to set for root
+infinidb_mysql_root_password: password
+infinidb_mysql_root_user: root

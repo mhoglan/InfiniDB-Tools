@@ -1,0 +1,9 @@
+---
+# Default data directories to none (will use install directory)
+infinidb_data_directories: []
+infinidb_install_directories: []
+infinidb_install_symlinks: []
+
+infinidb_update_inventory: true
+infinidb_clusters_inventory_directory: clusters 
+infinidb_create_local_inventory: true

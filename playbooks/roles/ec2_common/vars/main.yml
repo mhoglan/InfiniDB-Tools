@@ -1,0 +1,45 @@
+---
+# Default ephemeral disks to none
+ephemeral_disks: []
+
+# Default EBS disks to none
+ebs_disks: []
+
+# Default auto_mkfs to true
+auto_mkfs: true
+
+# Default the disk_fs and disk_prefix 
+# Allows just overriding image variable and inheriting these defaults
+image_fs: ext4
+device_prefix: xvd
+device_offset: 0
+
+# The ASCII int to start the sequence with, 98 is 'b'
+# Allows creating /dev/xvdb or /dev/sdb 
+device_sequence_start: 98
+
+# Define var files to include dynamically, allows site override path
+var_includes:
+  - name: "images"
+    value: "{{ image_type }}"
+  - name: "instance_types"
+    value: "{{ instance_type }}"
+  - name: "keys"
+    value: "{{ keypair }}"
+  - name: "subnets"
+    value: "{{ subnet }}"
+  - name: "security_groups"
+    value: "{{ security_group }}"
+
+var_locations: 
+  - files: 
+      - "{{ item.value }}.yml"
+      - default.yml
+    paths: 
+      - "{{ site_vars_path }}/{{ item.name }}/"
+      - "../vars/{{ item.name }}/"
+
+# Validate vars by default
+# validate_vars trumps ec2_validate_vars
+validate_vars: true
+ec2_validate_vars: true

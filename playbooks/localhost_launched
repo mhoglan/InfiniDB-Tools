@@ -1,0 +1,5 @@
+[localhost]
+127.0.0.1 ansible_connection=local
+
+[launched]
+127.0.0.1 node_ip=127.0.0.1 node_name=localhost

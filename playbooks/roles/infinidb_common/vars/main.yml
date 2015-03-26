@@ -1,0 +1,51 @@
+---
+# Directories to ensure exist on nodes
+infinidb_system_directories:
+  - directory: /var/log
+    mode: "0755"
+
+# Default install options
+infinidb_install_profile: root
+infinidb_install_type: singlenode
+infinidb_dbroots_per_pm: 1
+infinidb_um_count: 1
+
+# Default user for the MySQL of InfiniDB
+infinidb_mysql_user: mysql
+infinidb_mysql_group: mysql
+
+# System dependencies to run InfiniDB
+# Most are provided by distros, listed for completeness
+# expect required for multinode installs
+infinidb_system_packages:
+  - elfutils-libelf
+  - expect
+  - glibc
+  - libxml2
+  - ncurses-libs
+  - nss-softokn-freebl
+  - zlib
+
+# Default location on local machine containing InfiniDB binary packages
+infinidb_package_directory: /opt/infinidb/packages/database
+
+# Default retrieval method for package to remote machine, can copy from host or s3download
+infinidb_package_retrieval: copy
+
+# Define var files to include dynamically, allows site override path
+var_includes:
+  - name: "infinidb_profiles"
+    value: "{{ infinidb_install_profile }}"
+
+var_locations: 
+  - files: 
+      - "{{ item.value }}.yml"
+      - default.yml
+    paths: 
+      - "{{ site_vars_path }}/{{ item.name }}/"   
+      - "../vars/{{ item.name }}/"
+
+# Validate vars by default
+# validate_vars trumps infinidb_validate_vars
+validate_vars: true
+infinidb_validate_vars: true

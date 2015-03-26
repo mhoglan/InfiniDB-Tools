@@ -1,0 +1,10 @@
+---
+# Setup Supervisor to manage InfiniDB
+- name: Setup Supervisor for InfiniDB
+  hosts: launched 
+  gather_facts: true
+  user: root
+  sudo: true
+  sudo_user: '{{ infinidb_user }}'
+  roles:
+    - infinidb_supervisor

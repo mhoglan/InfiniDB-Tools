@@ -1,0 +1,15 @@
+---
+dependencies: 
+  # infinidb_common responsible for shared vars
+  - { role: infinidb_common }
+  # ensure directories
+  - role: system_directory
+    system_directories: "{{ infinidb_system_directories }}"
+  - role: system_directory
+    system_directories: "{{ infinidb_install_directories }}"
+  - role: system_directory
+    system_directories: "{{ infinidb_data_directories }}"
+  - role: system_package
+    system_packages: "{{ infinidb_system_packages }}"
+  - role: system_symlink
+    system_symlinks: "{{ infinidb_install_symlinks }}"

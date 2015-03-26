@@ -1,0 +1,14 @@
+---    
+spot_price: 0
+image_type: instance_backed
+keypair: root
+subnet: subnet_1
+instance_type: m3.medium
+instance_count: 1
+infinidb_install_type: singlenode
+ebs_disks:
+  - device: /dev/xvdf
+    type: gp2
+    size: 100
+    fs: ext4
+    mkfs: true

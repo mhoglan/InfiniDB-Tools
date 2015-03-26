@@ -1,0 +1,10 @@
+---
+# Default AMI to use
+
+# Instance Backed
+# RightImage_CentOS_6.5_x64_v14.1.3_HVM (ami-17084527)
+# Devices start at /dev/xvdb
+image: ami-17084527
+image_fs: ext4
+device_prefix: xvd
+device_offset: 0

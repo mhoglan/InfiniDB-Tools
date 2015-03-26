@@ -1,0 +1,8 @@
+---
+# TODO: Have to always specify socket because Ansible does not read socket from .my.cnf
+
+- name: Generate InfiniDB supervisor script
+  template: src=infinidb.sh.j2 dest={{ infinidb_supervisor_script }} owner={{ infinidb_user }} group={{ infinidb_group }} mode=0755 backup=yes
+
+- name: Generate Supervisor conf for InfiniDB
+  template: src=supervisord.conf.j2 dest={{ infinidb_supervisord_conf }} owner={{ infinidb_user }} group={{ infinidb_group }} backup=yes

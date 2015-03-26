@@ -1,0 +1,6 @@
+---
+# Default to no security group; will cause attribute to omit
+# Probably cannot get into instance without security group (SSH blocked)
+
+# Example of populated entry
+# security_group: default-security-group

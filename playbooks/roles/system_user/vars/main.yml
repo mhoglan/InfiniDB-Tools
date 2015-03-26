@@ -1,0 +1,36 @@
+---
+# Default users to empty list
+system_users: []
+
+# Example of populated entry
+# system_users:
+#   - user: infinidb
+#     group: infinidb
+#     sudo: true
+#     ssh_authorized_keys:
+#       - insecure_rsa.pub
+#     ssh_private_keys:
+#       - insecure_rsa
+#    ssh_config:
+#      - host: "*"
+#        key: "insecure_rsa"
+#     ulimits:
+#       - "infinidb    soft    nofile  65535"
+#       - "infinidb    hard    nofile  65535"
+#   - user: root
+#     group: root
+#     ssh_authorized_keys:
+#       - /absolute/path/to/ssh/keys/id_rsa.pub
+#     ssh_private_keys:
+#       - /absolute/path/to/ssh/keys/id_rsa
+
+
+# Not the greatest way to dynamically find the keys
+# Can't use include + with_items till 2.0 which would be better
+# item.1 is because of the with_subelements in the tasks.
+ssh_key_locations: 
+  - files: 
+      - "{{ item.1 }}"
+    paths: 
+      - "{{ site_vars_path }}/ssh_keys/"   
+      - "../files/ssh_keys/"

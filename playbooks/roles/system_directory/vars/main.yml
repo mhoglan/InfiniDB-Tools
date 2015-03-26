@@ -1,0 +1,10 @@
+---
+# Default directories to an empty list
+system_directories: []
+
+# Example of populated entry
+# system_directories: 
+#   - directory: /example
+#     owner: root
+#     group: root
+#     mode: "0755"

@@ -1,0 +1,40 @@
+---
+# Provision instances brought up
+- name: Prepare InfiniDB instances
+  hosts: launched
+  gather_facts: true
+  user: root
+  roles:
+    - infinidb_base
+
+# Install InfiniDB from the PM1 node
+- name: Install InfiniDB 
+  hosts: pm1 
+  gather_facts: true
+  user: root
+  sudo: true
+  sudo_user: '{{ infinidb_user }}'
+  roles:
+    # Pass the groups in as vars so the role does not have a direct
+    # dependency on the groupvars (allows role re-use)
+    - role: infinidb_binary
+      ums: "{{ groups.ums }}"
+      pms: "{{ groups.pms }}"
+      pm1: "{{ groups.pm1 }}"
+
+# Separate data area on InfiniDB instances
+- name: Setup InfiniDB MySQL
+  hosts: um1 
+  gather_facts: true
+  user: root
+  sudo: true
+  sudo_user: '{{ infinidb_user }}'
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_first_found:
+        - "{{ site_vars_path }}/mysql_users.yml"
+        - vars/default/mysql_users.yml
+  roles:
+    - role: infinidb_mysql
+      infinidb_mysql_secure: true
+      infinidb_mysql_users: "{{ users }}"

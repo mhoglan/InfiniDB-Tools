@@ -1,0 +1,8 @@
+---
+# Create inventory file from hostvars of InfiniDB cluster
+- name: Ensure inventory path
+  local_action: file path={{ infinidb_clusters_inventory_directory }} state=directory
+
+# Update the inventory groups and vars
+- name: Create local inventory file for cluster
+  local_action: template src=cluster_inventory.j2 dest={{ infinidb_clusters_inventory_directory }}/{{ cluster_name }} backup=yes

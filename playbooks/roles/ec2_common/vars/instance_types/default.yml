@@ -1,0 +1,3 @@
+---
+# Default to zero ephemeral disks
+ephemeral_disk_count: 0

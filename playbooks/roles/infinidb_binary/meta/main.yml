@@ -1,0 +1,5 @@
+---
+dependencies:
+  # infinidb_common responsible for shared vars of infinidb
+  - { role: infinidb_common }
+  - { role: python_package, python_packages: ['boto'], when: infinidb_package_retrieval == 's3download' }

@@ -1,0 +1,8 @@
+---
+# Default installation profile
+infinidb_user: root
+infinidb_group: root
+infinidb_install_directories: 
+  - directory: /usr/local
+infinidb_install_directory: /usr/local
+infinidb_home_directory: /root

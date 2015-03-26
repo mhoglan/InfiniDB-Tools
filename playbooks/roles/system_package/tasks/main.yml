@@ -1,0 +1,12 @@
+# Cannot dynamically include task files like var files, must use conditional 
+# Setup system packages if yum
+- name: Ensure system dependencies / utilities are present (yum)
+  yum: pkg={{ item }} state=present
+  with_items: system_packages
+  when: system_packages is defined and ansible_pkg_mgr == 'yum'
+  
+# Setup system packages if apt
+- name: Ensure system dependencies / utilities are present (yum)
+  apt: pkg={{ item }} state=present
+  with_items: system_packages
+  when: system_packages is defined and ansible_pkg_mgr == 'apt'

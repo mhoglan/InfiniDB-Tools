@@ -1,0 +1,28 @@
+---
+# Secure InfiniDB and update users
+- name: Ensure InfiniDB service is running
+  service: name=infinidb state=started
+
+- name: Allow remote root access
+  mysql_user: name=root password={{ infinidb_mysql_root_password }} host={{ item }} login_unix_socket={{ infinidb_mysql_socket }}
+  with_items:
+    - "%"
+    - "{{ ansible_hostname }}"
+    - "127.0.0.1"
+    - "::1"
+    - "localhost"
+
+- name: Generate ~{{ infinidb_user }}/.my.cnf
+  template: src=my.cnf.j2 dest=~{{ infinidb_user }}/.my.cnf owner={{ infinidb_user }} group={{ infinidb_group}} backup=yes
+
+- name: Delete anonymous user
+  mysql_user: user="" host={{ item }} state=absent login_unix_socket={{ infinidb_mysql_socket }}
+  with_items:
+    - "%"
+    - "{{ ansible_hostname }}"
+    - "127.0.0.1"
+    - "::1"
+    - "localhost"
+
+- name: Remove test database
+  mysql_db: db=test state=absent login_unix_socket={{ infinidb_mysql_socket }}

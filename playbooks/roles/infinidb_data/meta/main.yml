@@ -1,0 +1,4 @@
+---
+dependencies:
+  # infinidb_common responsible for shared vars of infinidb
+  - { role: infinidb_common }

@@ -1,0 +1,10 @@
+---
+# Separate data area on InfiniDB instances
+- name: Separate data files
+  hosts: launched 
+  gather_facts: true
+  user: root
+  sudo: true
+  sudo_user: '{{ infinidb_user }}'
+  roles:
+    - infinidb_data

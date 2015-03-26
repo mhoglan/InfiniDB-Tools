@@ -1,0 +1,6 @@
+---
+# Default to no key; will cause attribute to omit
+# Probably can't get into instance without defining a key (SSH reject)
+
+# Example of populated entry
+# key_name: default

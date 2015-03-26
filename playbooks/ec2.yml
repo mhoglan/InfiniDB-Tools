@@ -1,0 +1,16 @@
+---
+# Orchestrate instances from local machine
+# instances will be in the launched group after
+- name: Start EC2 instances
+  hosts: 127.0.0.1
+  connection: local
+  roles:
+    - ec2
+
+# Provision instances brought up
+- name: Configure launched instances
+  hosts: launched
+  gather_facts: true
+  user: root
+  roles:
+    - ec2_base

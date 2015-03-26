@@ -1,0 +1,73 @@
+---
+# Shared variables are loaded through ec2_common dependency
+
+# Launch OnDemand if spot_price is undefined else Spot instance
+- name: Launch EC2 spot instance
+  ec2:
+    aws_access_key: '{{ aws_access_key | default(omit) }}'
+    aws_secret_key: '{{ aws_secret_key | default(omit) }}'
+    key_name: '{{ key_name | default(omit) }}'
+    group: '{{ security_group | default(omit) }}'
+    instance_type: '{{ instance_type }}'
+    instance_tags:
+      Cluster: '{{ cluster_name }}'
+      launch_type: ansible
+    image: '{{ image }}'
+    wait: true
+    region: '{{ region | default(omit) }}'
+    vpc_subnet_id: '{{ vpc_subnet_id | default(omit) }}'
+    count: '{{ instance_count }}'
+    spot_price: '{{ spot_price | default(omit) }}'
+  register: ec2
+
+# Create any EBS volumes per instance requested
+- name: Create EBS volumes for instances
+  ec2_vol:
+    aws_access_key: '{{ aws_access_key | default(omit) }}'
+    aws_secret_key: '{{ aws_secret_key | default(omit) }}'
+    instance: '{{ item[0].id }}'
+    region: '{{ region | default(omit) }}'
+    device_name: '{{ item[1].device }}'
+    volume_type: '{{ item[1].type }}'
+    volume_size: '{{ item[1].size }}'
+    state: present
+  with_nested: 
+    - ec2.instances
+    - ebs_disks
+
+# Include vars with the group which allows them to be in scope for future plays
+- name: Create launched group and vars from EC2 hosts
+  add_host: >
+    hostname={{ item.1.private_ip }} 
+    groupname=launched 
+    node_ip={{ item.1.private_ip }} 
+    node_name={{ cluster_name}}-{{ item.0 + 1 }} 
+    cluster_name={{ cluster_name }} 
+    resource_id={{ item.1.id }} 
+    node_number={{ item.0 + 1 }}
+  with_indexed_items: ec2.instances
+
+# Use the hostvars set in the add_host above, that way if the hostvars change, the tags change
+# Some tag names redundant to allow easy display on AWS Console, but always have a tag consistent with var name
+- name: Create tags for instances based on vars 
+  ec2_tag: resource={{ hostvars[item].resource_id }} region={{ region | default(omit) }} state=present
+  with_items: groups.launched
+  args:
+    tags:
+      Name: '{{ hostvars[item].node_name }}'
+      Node Name: '{{ hostvars[item].node_name }}'
+      Node Number: '{{ hostvars[item].node_number }}'
+      Node IP: '{{ hostvars[item].node_ip }}'
+      Cluster: '{{ hostvars[item].cluster_name }}'
+      Cluster Name: '{{ hostvars[item].cluster_name }}'
+
+- name: Update known_hosts to resolve conflicts for reused IPs
+  command: ssh-keygen -R {{ hostvars[item].node_ip }}
+  with_items: groups.launched
+
+- name: Pausing to give SSH chance to come up
+  pause: seconds={{ ssh_wait_seconds }} 
+
+- name: Checking SSH connectivity
+  wait_for: host={{ hostvars[item].node_ip }} port=22 timeout={{ ssh_timeout_seconds }} state=started
+  with_items: groups.launched

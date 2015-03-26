@@ -1,0 +1,4 @@
+# Create directories for system
+- name: Create directories
+  file: path={{ item.directory }} owner={{ item.owner | default(omit) }} group={{ item.group | default(omit) }} mode={{ item.mode | default(omit) }} state=directory
+  with_items: system_directories

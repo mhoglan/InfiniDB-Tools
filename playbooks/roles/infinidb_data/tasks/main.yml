@@ -1,0 +1,42 @@
+---
+# TODO: this is taking a long time for some reason.
+- name: Ensure InfiniDB is stopped
+  service: name=infinidb state=stopped
+  sudo: yes
+
+# Create the base diretory, sudo in case based in parent owned by root
+- name: Ensure base directory structure for data directory
+  file: path={{ infinidb_data_directory }} owner={{ infinidb_user }} group={{ infinidb_group }} state=directory
+  sudo: yes
+
+# Setup the InfiniDB data area; no need for sudo since base directory exists
+- name: Ensure directory structure of data directory
+  file: path={{ infinidb_data_directory }}/{{ item }} owner={{ infinidb_user }} group={{ infinidb_group }} state=directory
+  with_items:
+    - dbroots
+# Setup the MySQL data area; no need for sudo since base directory exists
+- name: Ensure directory and ownership for mysql data directory
+  file: path={{ infinidb_data_directory }}/mysql owner={{ infinidb_mysql_user }} group={{ infinidb_mysql_group }} state=directory
+
+# Move files to data directory
+- name: Move bulk to new data location
+  shell: mv -f {{ infinidb_install_directory }}/Calpont/data/bulk {{ infinidb_data_directory }}/. creates={{ infinidb_data_directory }}/bulk
+- name: Move systemFiles to new data location
+  shell: mv -f {{ infinidb_install_directory }}/Calpont/data1/systemFiles {{ infinidb_data_directory }}/. creates={{ infinidb_data_directory }}/systemFiles
+- name: Move dbroots to new data location
+  shell: mv -f {{ infinidb_install_directory }}/Calpont/data[0-9]* {{ infinidb_data_directory }}/dbroots/. creates={{ infinidb_data_directory }}/dbroots/data1
+- name: Move mysql/db to new data location
+  shell: mv -f {{ infinidb_install_directory }}/Calpont/mysql/db {{ infinidb_data_directory }}/mysql/. creates={{ infinidb_data_directory }}/mysql/db
+
+# Setup symlinks back to the install directory
+- name: Create symlink to bulk
+  file: src={{ infinidb_data_directory}}/bulk dest={{ infinidb_install_directory }}/Calpont/data/bulk owner={{ infinidb_user }} group={{ infinidb_group }} state=link
+- name: Create symlink to systemFiles in data/dbroot/data1
+  file: src={{ infinidb_data_directory }}/systemFiles dest={{ infinidb_data_directory }}/dbroots/data1/systemFiles owner={{ infinidb_user }} group={{ infinidb_group }} state=link
+
+# Use -t for 4th form of symlink creation as there can be multiple dbroots, but also could be only 1 (which doesn't work in 3rd form)
+# Chain chown -h to assign owner / group of symlink;   Ansible cannot do 3rd or 4th form symlinks 
+- name: Create symlinks to each dbroot
+  shell: ln -sf -t {{ infinidb_install_directory }}/Calpont/. {{ infinidb_data_directory }}/dbroots/data[0-9]* && chown -h {{ infinidb_user }}:{{ infinidb_group }} {{infinidb_install_directory}}/Calpont/data[0-9]*
+- name: Create symlink to mysql/db
+  file: src={{ infinidb_data_directory}}/mysql/db dest={{ infinidb_install_directory }}/Calpont/mysql/db owner={{ infinidb_mysql_user }} group={{ infinidb_mysql_group }} state=link

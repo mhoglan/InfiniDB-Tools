@@ -1,0 +1,10 @@
+---    
+spot_price: 0
+image_type: instance_backed
+keypair: root
+subnet: subnet_1
+instance_type: m3.medium
+instance_count: 3
+infinidb_um_count: 1
+infinidb_dbroots_per_pm: 2
+infinidb_install_type: multinode_separate

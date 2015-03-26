@@ -1,0 +1,13 @@
+---
+# AWS information
+# Can set here to be applied all or can also set respective ENV vars
+# AWS_ACCESS_KEY, AWS_SECRET_KEY, EC2_REGION
+# aws_access_key: 123456key
+# aws_secret_key: 123456key
+# region: us-west-2
+
+# Perform validation of vars for roles that support
+validate_vars: true
+
+# Define the location of the site variables 
+site_vars_path: "{{ playbook_dir }}/site_vars"

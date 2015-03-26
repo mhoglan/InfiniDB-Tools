@@ -1,0 +1,14 @@
+---
+# TODO: Have to always specify socket because Ansible does not read socket from .my.cnf
+
+- name: Secure InfiniDB MySQL
+  include: secure_mysql.yml
+  when: infinidb_mysql_secure is defined and infinidb_mysql_secure | bool
+
+- debug: var=infinidb_mysql_users
+# Setup the users
+- name: Setup InfiniDB MySQL users
+  mysql_user: name={{ item.0.user }} password={{ item.0.password }} host={{ item.1 }} priv={{ item.0.privs | join('/') }} login_unix_socket={{ infinidb_mysql_socket }}
+  with_subelements:
+    - infinidb_mysql_users
+    - hosts

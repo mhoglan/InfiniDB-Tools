@@ -1,0 +1,6 @@
+[supervisord]
+nodaemon=true
+user={{ infinidb_user }}
+
+[program:infinidb]
+command={{ infinidb_supervisor_script }}

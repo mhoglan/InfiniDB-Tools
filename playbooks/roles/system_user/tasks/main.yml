@@ -1,0 +1,59 @@
+# Create groups and users
+# Dynamically get the groups from the users list
+- name: Create groups for users
+  group: name={{ item }} state=present
+  with_items: system_users | map(attribute='group') | list | unique
+- name: Create users 
+  user: name={{ item.user }} group={{ item.group }} state=present
+  with_items: system_users
+
+# Configure sudo access for users requested
+- name: Configure sudoers.d/ for users with sudo
+  lineinfile: dest=/etc/sudoers.d/{{ item.user }} owner=root group=root mode=0440
+              line="{{ item.user }} ALL=(ALL) NOPASSWD:ALL"
+              state=present
+              create=yes
+              validate='visudo -cf %s'
+  when: item.sudo is defined and item.sudo | bool
+  with_items: system_users
+- name: Turn off requiretty for users with sudo 
+  lineinfile: dest=/etc/sudoers.d/{{ item.user }} owner=root group=root mode=0440
+              line="Defaults:{{ item.user }} !requiretty"
+              state=present
+              create=no
+              validate='visudo -cf %s'
+  when: item.sudo is defined and item.sudo | bool 
+  with_items: system_users
+
+# Configure users SSH 
+- name: Ensure .ssh for users exists
+  file: path=~{{ item.user }}/.ssh/ state=directory
+  with_items: system_users
+
+# These ssh keys and other complex dicts get much easier in 2.0 with the ability to do with_items + include
+- name: Setup private keys for users
+  copy: src="{{ lookup('first_found', ssh_key_locations) }}" dest=~{{ item.0.user }}/.ssh/{{ item.1 }} owner={{ item.0.user }} group={{ item.0.group }} mode=0400
+  with_subelements:
+    - system_users
+    - ssh_private_keys
+
+- name: Setup ssh config for users
+  template: src=ssh_config.j2 dest=~{{ item.user }}/.ssh/config owner={{ item.user }} group={{ item.group}} mode=0400 backup=yes
+  when: item.ssh_config is defined
+  with_items: system_users 
+
+- name: Setup authorized keys for users
+  authorized_key: user={{ item.0.user }} key="{{ lookup('file', lookup('first_found', ssh_key_locations)) }}"
+  with_subelements:
+    - system_users
+    - ssh_authorized_keys
+
+# Configure ulimits
+- name: Set ulimits for users
+  lineinfile: dest=/etc/security/limits.conf
+              line="{{ item.1 }}"
+              state=present
+              create=yes
+  with_subelements:
+    - system_users
+    - ulimits

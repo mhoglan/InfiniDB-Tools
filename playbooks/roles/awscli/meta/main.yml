@@ -1,0 +1,5 @@
+---
+allow_duplicates: yes
+dependencies:
+  # ensure awscli python package available
+  - { role: python_package, python_packages: ['awscli'] }

@@ -1,0 +1,11 @@
+---
+# Default packages to empty list
+# Responsiblity of user to define proper names for apt or yum packages
+system_packages: []
+
+# Example of populated entry
+# system_packages:
+#   - python-setuptools
+#   - python-devel
+#   - gcc
+#   - git

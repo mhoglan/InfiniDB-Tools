@@ -1,0 +1,5 @@
+---
+dependencies:
+  # infinidb_common responsible for shared vars of infinidb
+  - { role: infinidb_common }
+  - { role: system_package, system_packages: ['MySQL-python'] }

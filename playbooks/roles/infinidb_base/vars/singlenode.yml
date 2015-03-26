@@ -1,0 +1,4 @@
+---
+infinidb_um_count: 1
+ums: '{{ groups.launched }}'
+pms: '{{ groups.launched }}'

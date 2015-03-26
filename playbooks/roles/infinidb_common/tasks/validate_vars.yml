@@ -1,0 +1,7 @@
+---
+# TODO Tried to move this to a shared role, but the include_vars is processed too late
+- name: "Performing variable validation"
+  assert:
+    that:
+      - "{{ item }} is defined and validation_values.{{ item }} is defined and {{ item }} in validation_values.{{ item }}"
+  with_items: validation_vars
