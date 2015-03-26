@@ -1,0 +1,39 @@
+---
+# Specify vars to validate
+# Keep separate from value dict to allow override
+ec2_validation_vars:
+  - instance_type
+  - image
+  - vpc_subnet_id
+  - key_name
+
+# Dict which specifies valid var values 
+ec2_validation_values:
+  instance_type:
+    - m3.medium
+    - m3.large
+    - m3.xlarge
+    - m3.2xlarge
+    - r3.large
+    - r3.xlarge
+    - r3.2xlarge
+    - r3.4xlarge
+    - r3.8xlarge
+    - i2.2xlarge
+    - i2.4xlarge
+    - i2.8xlarge
+    - c3.large
+    - c3.xlarge
+    - c3.2xlarge
+    - c3.4xlarge
+    - c3.8xlarge
+  image:
+    - ami-12345678
+    - ami-23456789
+    - ami-34567890
+  vpc_subnet_id:
+    - subnet-12345678
+    - subnet-23456789
+  key_name:
+    - keypair_1
+    - keypair_2

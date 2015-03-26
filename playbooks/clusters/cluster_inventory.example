@@ -1,0 +1,21 @@
+#  Example of inventory file created dynamically from bring up cluster
+#
+# [launched]
+# 10.0.3.10       cluster_name=infinidb_2um2pm  node_name=infinidb_2um2pm-1        node_ip=10.0.3.10     node_number=1    infinidb_role=um        infinidb_role_num=1
+# 10.0.3.11       cluster_name=infinidb_2um2pm  node_name=infinidb_2um2pm-2        node_ip=10.0.3.11     node_number=2    infinidb_role=um        infinidb_role_num=2
+# 10.0.3.12       cluster_name=infinidb_2um2pm  node_name=infinidb_2um2pm-3        node_ip=10.0.3.12     node_number=3    infinidb_role=pm        infinidb_role_num=2
+# 10.0.3.13       cluster_name=infinidb_2um2pm  node_name=infinidb_2um2pm-4        node_ip=10.0.3.13     node_number=4    infinidb_role=pm        infinidb_role_num=1
+# 
+# [ums]
+# 10.0.3.10
+# 10.0.3.11
+# 
+# [um1]
+# 10.0.3.10
+# 
+# [pms]
+# 10.0.3.12
+# 10.0.3.13
+# 
+# [pm1]
+# 10.0.3.13

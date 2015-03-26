@@ -1,0 +1,8 @@
+---
+# EBS Backed
+# RightImage_CentOS_6.5_x64_v14.1_HVM_EBS (ami-4d480e7d)
+# Devices start at /dev/xvdb
+image: ami-4d480e7d
+image_fs: ext4
+device_prefix: xvd
+device_offset: 0
