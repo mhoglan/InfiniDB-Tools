@@ -1,0 +1,5 @@
+---
+image: ami-5db9ec38
+image_fs: ext4
+device_prefix: xvd
+device_offset: 0

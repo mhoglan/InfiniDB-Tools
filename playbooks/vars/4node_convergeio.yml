@@ -1,38 +1,9 @@
 ---    
-validate_vars: false
-image: ami-5db9ec38
-image_fs: ext4
-device_prefix: xvd
-device_offset: 0
-keypair: root
+image_type: convergeio_1067
+keypair: default
 subnet: private-us-east-1a
 instance_type: d2.xlarge
 #spot_price: 1.00
 instance_count: 4
 configure_disks: false
-infinidb_install_profile: infinidb
-infinidb_install_directories: 
-  - directory: /mnt/vdisk/data
-    owner: infinidb
-    group: infinidb
-infinidb_install_symlinks:
-  - src: /mnt/vdisk/data
-    dest: /data
-    owner: infinidb
-    group: infinidb
-infinidb_system_packages:
-  - libelf-dev
-  - expect
-  - libc6-dev
-  - libxml2
-  - libncurses-dev
-  - libnss3
-  - zlib1g-dev
-infinidb_install_type: multinode_separate
-infinidb_install_version: 4.8.4-0
-infinidb_um_count: 1
-infinidb_package_retrieval: copy
-infinidb_package_directory: /opt/infinidb
-infinidb_mysql_root_password: password
-infinidb_mysql_root_user: root
-convergeio_domain_name: infinidb
+convergeio_domain_name: convergeio_test
