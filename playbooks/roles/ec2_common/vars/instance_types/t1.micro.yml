@@ -1,0 +1,5 @@
+ephemeral_disks:
+  - device_name: /dev/xvdb
+    ephemeral: ephemeral0
+    fs: ext4
+    mkfs: true

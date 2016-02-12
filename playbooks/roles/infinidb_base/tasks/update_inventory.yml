@@ -4,9 +4,9 @@
   include_vars: "{{ infinidb_install_type }}.yml"
   
 - name: Set groups for ums
-  add_host: name={{ item.1 }} groups=ums,um{{ item.0+1 }} infinidb_role=um infinidb_role_num={{ item.0+1 }}
+  add_host: name={{ item.1 }} infinidb_node_name={{ cluster_name }}-um{{ item.0+1 }} groups=ums,um{{ item.0+1 }} infinidb_role=um infinidb_role_num={{ item.0+1 }}
   with_indexed_items: ums
 
 - name: Set groups for pms
-  add_host: name={{ item.1 }} groups=pms,pm{{ item.0+1 }} infinidb_role=pm infinidb_role_num={{ item.0+1 }}
+  add_host: name={{ item.1 }} infinidb_node_name={{ cluster_name }}-pm{{ item.0+1}} groups=pms,pm{{ item.0+1 }} infinidb_role=pm infinidb_role_num={{ item.0+1 }}
   with_indexed_items: pms

@@ -1,0 +1,4 @@
+---
+# Default data directories to none (will use install directory)
+convergeio_domain: convergeio
+convergeio_nodes: []

@@ -1,0 +1,17 @@
+---
+- name: Create vdisks
+  shell: cio vdadd -c 3000 -l 3 -n {{ node_name }} -t HDD -q
+  sudo: true
+  register: vdisk_result
+
+- name: Format vdisks
+  filesystem: fstype=ext4 dev=/dev/vdisk/vd{{ vdisk_result.stdout }} force=yes
+  sudo: true
+
+- name: Create /mnt/vdisk
+  file: path=/mnt/vdisk state=directory
+  sudo: true
+
+- name: Mount vdisks
+  mount: name=/mnt/vdisk src=/dev/vdisk/vd{{ vdisk_result.stdout }} fstype=ext4 state=mounted
+  sudo: true

@@ -11,6 +11,7 @@
   s3:
     aws_access_key: '{{ aws_access_key | default(omit) }}'
     aws_secret_key: '{{ aws_secret_key | default(omit) }}'
+    region: us-west-2
     bucket: '{{ infinidb_releases_s3_bucket }}'
     object: infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz
     dest: '{{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version }}.x86_64.bin.tar.gz'
@@ -35,14 +36,25 @@
   template: src={{ infinidb_install_type }}_postconfigure_stdin.j2 dest={{ infinidb_home_directory }}/postconfigure_stdin
 
 - name: Ensure install base directory exists ({{ infinidb_install_directory }})
-  file: path={{ infinidb_install_directory }} state=directory
+  file: path={{ infinidb_install_directory }} state=directory follow=true
 
 # Trailing / matters on dest as it will require rights on parent dir if not specified
 - name: Unpack InfiniDB into install location
-  unarchive: src={{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version}}.x86_64.bin.tar.gz copy=no creates={{ infinidb_install_directory }}/Calpont/etc/Calpont.xml dest={{ infinidb_install_directory }}/
+  unarchive: src={{ infinidb_home_directory }}/infinidb-ent-{{ infinidb_install_version}}.x86_64.bin.tar.gz copy=no creates={{ infinidb_install_directory }}/Calpont/etc/Calpont.xml dest={{ infinidb_install_directory }}/ follow=true
 
 - name: Execute post-install
   command: "{{ infinidb_install_directory }}/Calpont/bin/post-install --installdir={{ infinidb_install_directory }}/Calpont"
+
+# Must be done because post-install cannot install service script if nonroot install
+- name: Copy infinidb service script to /etc/init.d/
+  command: cp {{ infinidb_install_directory }}/Calpont/bin/infinidb /etc/init.d/infinidb
+  sudo: true
+  sudo_user: root
+
+- name: Enable infinidb service
+  service: name=infinidb enabled=yes
+  sudo: true
+  sudo_user: root
 
 # Run postConfigure
 - name: Execute postConfigure with generated input

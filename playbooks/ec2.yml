@@ -11,6 +11,5 @@
 - name: Configure launched instances
   hosts: launched
   gather_facts: true
-  user: root
   roles:
     - ec2_base

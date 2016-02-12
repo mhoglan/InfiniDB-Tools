@@ -1,6 +1,6 @@
 [launched]
 {% for host in groups['launched'] %}
-{{ host }}      cluster_name={{ hostvars[host].cluster_name }}  node_name={{ hostvars[host].node_name }}        node_ip={{ hostvars[host].node_ip }}    node_number={{ hostvars[host].node_number }}    infinidb_role={{ hostvars[host].infinidb_role }}        infinidb_role_num={{ hostvars[host].infinidb_role_num }}
+{{ host }}      cluster_name={{ hostvars[host].cluster_name }}  node_name={{ hostvars[host].node_name }}        node_ip={{ hostvars[host].node_ip }}    node_number={{ hostvars[host].node_number }} infinidb_node_name={{ hostvars[host].infinidb_node_name }}    infinidb_role={{ hostvars[host].infinidb_role }}        infinidb_role_num={{ hostvars[host].infinidb_role_num }}	aws_resource_id={{ hostvars[host].resource_id }}
 {% endfor %}
 
 [ums]

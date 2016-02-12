@@ -5,7 +5,11 @@ dependencies:
     disks: "{{ ephemeral_disks }}"
     mount_base_directory: /mnt
     mount_base_name: ephemeral
+    sudo: true
+    when: "{{ configure_disks }}"
   - role: disk_device
     disks: "{{ ebs_disks }}"
     mount_base_directory: /mnt
     mount_base_name: ebs
+    sudo: true
+    when: "{{ configure_disks }}"

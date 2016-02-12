@@ -2,3 +2,8 @@
 - include: ec2.yml
 - include: system.yml
 - include: infinidb.yml
+- name: Update EC2 Tags
+  hosts: 127.0.0.1
+  connection: local
+  roles:
+    - role: infinidb_ec2_tag

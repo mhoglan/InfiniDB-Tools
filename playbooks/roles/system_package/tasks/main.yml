@@ -6,7 +6,8 @@
   when: system_packages is defined and ansible_pkg_mgr == 'yum'
   
 # Setup system packages if apt
-- name: Ensure system dependencies / utilities are present (yum)
-  apt: pkg={{ item }} state=present
+- name: Ensure system dependencies / utilities are present (apt)
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=360
   with_items: system_packages
   when: system_packages is defined and ansible_pkg_mgr == 'apt'
+  ignore_errors: yes

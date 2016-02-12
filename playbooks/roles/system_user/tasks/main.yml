@@ -4,7 +4,7 @@
   group: name={{ item }} state=present
   with_items: system_users | map(attribute='group') | list | unique
 - name: Create users 
-  user: name={{ item.user }} group={{ item.group }} state=present
+  user: name={{ item.user }} group={{ item.group }} shell={{ item.shell | default(omit) }} state=present
   with_items: system_users
 
 # Configure sudo access for users requested
@@ -32,7 +32,7 @@
 
 # These ssh keys and other complex dicts get much easier in 2.0 with the ability to do with_items + include
 - name: Setup private keys for users
-  copy: src="{{ lookup('first_found', ssh_key_locations) }}" dest=~{{ item.0.user }}/.ssh/{{ item.1 }} owner={{ item.0.user }} group={{ item.0.group }} mode=0400
+  copy: src="{{ lookup('first_found', ssh_key_locations) }}" dest=~{{ item.0.user }}/.ssh/ owner={{ item.0.user }} group={{ item.0.group }} mode=0400
   with_subelements:
     - system_users
     - ssh_private_keys

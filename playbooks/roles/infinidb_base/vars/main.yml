@@ -7,3 +7,4 @@ infinidb_install_symlinks: []
 infinidb_update_inventory: true
 infinidb_clusters_inventory_directory: clusters 
 infinidb_create_local_inventory: true
+infinidb_update_hostname: true

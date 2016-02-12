@@ -1,5 +1,7 @@
 {% for n in range(device_sequence_start, device_sequence_start + ephemeral_disk_count, 1) %}
 - device: {{ '/dev/%s%c' | format(device_prefix,n) }}
+  device_name: {{ '/dev/%s%c' | format(device_prefix,n) }}
+  ephemeral: {{ 'ephemeral%d' | format(n-device_sequence_start) }}
   fs: {{ image_fs }}
   mkfs: {{ auto_mkfs }}
 {% endfor %}

@@ -1,0 +1,13 @@
+#!/bin/bash
+DOMAIN_NAME={{ convergeio_domain_name }}
+CIO_IP={{ hostvars[convergeio_nodes | first].node_ip }}
+USER=root
+PASSWORD=cioadmin
+NODE_NUMS={{ convergeio_nodes | count }}
+R5_EXTENT_NUMS=4
+MAX_DRIVES=48
+DFS_DEBUG=0
+VD_DEBUG=0
+NODE_IP=({% for node in convergeio_nodes %}{{ hostvars[node].node_ip }} {% endfor %})
+NODE_DRIVELIST=("xvdb xvdc xvdd" "xvdb xvdc xvdd" "xvdb xvdc xvdd" "xvdb xvdc xvdd")
+NODE_NAME=({% for node in convergeio_nodes %}{{ hostvars[node].node_name }} {% endfor %})

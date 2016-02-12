@@ -2,4 +2,4 @@
 dependencies:
   # infinidb_common responsible for shared vars of infinidb
   - { role: infinidb_common }
-  - { role: python_package, python_packages: ['boto'], when: infinidb_package_retrieval == 's3download' }
+  - { role: python_package, sudo: true, sudo_user: root, python_packages: ['boto'], when: infinidb_package_retrieval == 's3download' }

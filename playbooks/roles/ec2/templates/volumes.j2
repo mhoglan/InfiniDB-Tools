@@ -1,0 +1,4 @@
+{% for item in ec2_vol.results %}
+- instance_ip: "{{ item.item[0].private_ip }}"
+  volume_id: "{{ item.volume_id }}"
+{% endfor %}

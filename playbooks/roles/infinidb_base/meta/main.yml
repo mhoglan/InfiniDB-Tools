@@ -5,11 +5,21 @@ dependencies:
   # ensure directories
   - role: system_directory
     system_directories: "{{ infinidb_system_directories }}"
+    sudo: true
+    sudo_user: root
   - role: system_directory
     system_directories: "{{ infinidb_install_directories }}"
+    sudo: true
+    sudo_user: root
   - role: system_directory
     system_directories: "{{ infinidb_data_directories }}"
+    sudo: true
+    sudo_user: root
   - role: system_package
     system_packages: "{{ infinidb_system_packages }}"
+    sudo: true
+    sudo_user: root
   - role: system_symlink
     system_symlinks: "{{ infinidb_install_symlinks }}"
+    sudo: true
+    sudo_user: root

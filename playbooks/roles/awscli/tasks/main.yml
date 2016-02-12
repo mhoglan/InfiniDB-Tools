@@ -2,16 +2,22 @@
 - name: Ensure .aws for users exists
   file: path=~{{ item.user }}/.aws/ owner={{ item.user }} group={{ item.group }} state=directory
   when: item.awscli is defined
+  sudo: true
+  sudo_user: "{{ item.user }}"
   with_items: awscli_users
 
 # Setup aws credentials
 - name: Generate AWS credentials for users
   template: src=aws_credentials.j2 dest=~{{ item.user }}/.aws/credentials
-  when: item.awscli is defined
+  when: item.awscli is defined and item.awscli.access_key_id is defined and item.awscli.secret_access_key is defined
+  sudo: true
+  sudo_user: "{{ item.user }}"
   with_items: awscli_users
 
 # Setup awscli config
 - name: Generate awscli config for users
   template: src=awscli_config.j2 dest=~{{ item.user }}/.aws/config
   when: item.awscli is defined
+  sudo: true
+  sudo_user: "{{ item.user }}"
   with_items: awscli_users

@@ -5,6 +5,9 @@
 # aws_access_key: 123456key
 # aws_secret_key: 123456key
 # region: us-west-2
+aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+region: "{{ lookup('env', 'EC2_REGION') }}"
 
 # Perform validation of vars for roles that support
 validate_vars: true

@@ -1,10 +1,10 @@
 ---
 # Secure InfiniDB and update users
-- name: Ensure InfiniDB service is running
-  service: name=infinidb state=started
+#- name: Ensure InfiniDB service is running
+#  service: name=infinidb state=started
 
 - name: Allow remote root access
-  mysql_user: name=root password={{ infinidb_mysql_root_password }} host={{ item }} login_unix_socket={{ infinidb_mysql_socket }}
+  mysql_user: name=root password={{ infinidb_mysql_root_password }} priv=*.*:ALL,GRANT host={{ item }} login_unix_socket={{ infinidb_mysql_socket }}
   with_items:
     - "%"
     - "{{ ansible_hostname }}"
@@ -26,3 +26,7 @@
 
 - name: Remove test database
   mysql_db: db=test state=absent login_unix_socket={{ infinidb_mysql_socket }}
+
+# InfiniDB uses a MySQL connection to update the querystats table and other cross engine work
+#- name: Update CrossEngineSupport to use password
+#  shell: bash -lc "{{ infinidb_install_directory }}/Calpont/bin/setConfig CrossEngineSupport Password {{ infinidb_mysql_root_password }}"

@@ -1,0 +1,15 @@
+---
+- name: Assign ConvergeIO Nodes
+  hosts: launched
+  pre_tasks: 
+    - name: Updating hosts
+      add_host: name={{ item }} groups=convergeio_nodes
+      with_items: groups.launched
+- name: Setup ConvergeIO
+  hosts: convergeio_nodes
+  roles:
+    - role: convergeio
+      convergeio_nodes: "{{ groups.convergeio_nodes }}"
+      convergeio_master_node: "{{ groups.convergeio_nodes | first }}" 
+      tags:
+        - convergeio

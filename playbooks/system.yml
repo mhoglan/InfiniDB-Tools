@@ -3,7 +3,6 @@
 - name: Setup system on instances
   hosts: launched
   gather_facts: true
-  user: root
   pre_tasks:
     - include_vars: "{{ item }}"
       with_first_found:
@@ -12,6 +11,7 @@
   roles:
     - role: system_user
       system_users: "{{ users }}"
+      sudo: true
     # The role would have also skipped users without awscli defined, just showing another way to filter
     - role: awscli
       awscli_users: "{{ users | selectattr('awscli', 'defined') | list }}"

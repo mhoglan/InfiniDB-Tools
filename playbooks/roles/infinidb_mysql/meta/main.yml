@@ -2,4 +2,5 @@
 dependencies:
   # infinidb_common responsible for shared vars of infinidb
   - { role: infinidb_common }
-  - { role: system_package, system_packages: ['MySQL-python'] }
+  - { role: system_package, sudo: true, sudo_user: root, system_packages: ['MySQL-python'], when: ansible_pkg_mgr == 'yum' }
+  - { role: system_package, sudo: true, sudo_user: root, system_packages: ['python-mysqldb'], when: ansible_pkg_mgr == 'apt' }

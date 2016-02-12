@@ -1,0 +1,6 @@
+---
+# Default install options
+infinidb_install_profile: root
+infinidb_install_type: singlenode
+infinidb_dbroots_per_pm: 1
+infinidb_um_count: 1

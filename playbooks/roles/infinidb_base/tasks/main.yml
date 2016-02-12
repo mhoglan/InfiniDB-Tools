@@ -3,10 +3,34 @@
 - name: Create /etc/default/infinidb file
   template: src=default_infinidb.j2 dest=/etc/default/infinidb owner=root group=root mode=0755
 
+# Setup LD_LIBRARY_PATH for infinidb user
+# post-install is suppose to do this, but the script doesn't work completely for non root installs
+- name: Update bashrc (LD_LIBRARY_PATH) for {{ infinidb_user }}
+  lineinfile:
+    dest=~{{ infinidb_user }}/.bashrc
+    line="export LD_LIBRARY_PATH=$INFINIDB_INSTALL_DIR/lib:$INFINIDB_INSTALL_DIR/mysql/lib/mysql"
+    owner={{ infinidb_user }}
+    group={{ infinidb_group }}
+    state=present
+    insertbefore=BOF
+    create=yes
+    backup=yes
+- name: Update bashrc (INFINIDB_INSTALL_DIR) for {{ infinidb_user }}
+  lineinfile:
+    dest=~{{ infinidb_user }}/.bashrc
+    line="export INFINIDB_INSTALL_DIR={{ infinidb_install_directory }}/Calpont"
+    state=present
+    insertbefore=BOF
+
 - name: Update inventory groups and vars
   include: update_inventory.yml
   when: infinidb_update_inventory is defined and infinidb_update_inventory | bool
-  
+
 - name: Create local inventory
   include: create_local_inventory.yml
   when: infinidb_create_local_inventory is defined and infinidb_create_local_inventory | bool
+
+- name: Update hostname
+  hostname:
+    name={{ infinidb_node_name if infinidb_install_type != 'singlenode' else cluster_name }}
+  when: infinidb_update_hostname is defined and infinidb_update_hostname | bool

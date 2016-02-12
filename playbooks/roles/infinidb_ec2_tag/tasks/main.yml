@@ -1,0 +1,40 @@
+- name: Update EC2 tags 
+  ec2_tag: resource={{ hostvars[item].resource_id  }} 
+  with_items: groups.launched 
+  args:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}" 
+    tags:
+      infinidb_node_name: "{{ hostvars[item].infinidb_node_name }}"
+      infinidb_role: "{{ hostvars[item].infinidb_role }}"
+      infinidb_role_num: "{{ hostvars[item].infinidb_role_num }}"
+  when: infinidb_install_type != "singlenode"
+
+- name: Update EBS volume tags
+  ec2_tag: resource={{ item.volume_id }}
+  when: infinidb_install_type != "singlenode"
+  with_items: "{{ volumes | default([]) }}"
+  args:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
+    tags:
+      Name: "{{ cluster_name }}-data-{{ hostvars[item.instance_ip].infinidb_role }}{{ hostvars[item.instance_ip].infinidb_role_num }}"
+      cluster: "{{ cluster_name }}"
+      infinidb_role: "{{ hostvars[item.instance_ip].infinidb_role }}"
+      infinidb_role_num: "{{ hostvars[item.instance_ip].infinidb_role_num }}"
+      infinidb_node_name: "{{ hostvars[item.instance_ip].infinidb_node_name }}"
+
+# For single node install, exclude role based tags
+- name: Update EBS volume tags
+  ec2_tag: resource={{ item.1.volume_id }}
+  when: infinidb_install_type == "singlenode"
+  with_indexed_items: "{{ volumes | default([]) }}"
+  args:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
+    tags:
+      Name: "{{ cluster_name }}-data-{{ item.0 + 1 }}"
+      infinidb_node_name: "{{ cluster_name }}"
