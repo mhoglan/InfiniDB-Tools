@@ -1,0 +1,19 @@
+---
+# Specify vars to validate
+# Keep separate from value dict to allow override
+infinidb_validation_vars:
+  - infinidb_install_type
+  - infinidb_install_profile
+  - infinidb_package_retrieval
+  
+# Dict which specifies valid var values
+infinidb_validation_values:
+  infinidb_install_type:
+    - singlenode
+    - multinode_separate
+  infinidb_install_profile:
+    - profile_1
+    - profile_2
+  infinidb_package_retrieval:
+    - copy
+    - s3download

@@ -1,0 +1,11 @@
+---
+# Default user and install location for infinidb
+infinidb_user: infinidb
+infinidb_group: infinidb
+infinidb_install_directories: 
+  - directory: /mnt/ephemeral1/data
+infinidb_install_symlinks:
+  - src: /mnt/ephemeral1/data
+    dest: /data
+infinidb_install_directory: /data
+infinidb_home_directory: /home/infinidb
